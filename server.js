@@ -41,6 +41,7 @@ servient.start()
 .then( async (WoT) => {
 	const thing = await WoT.produce(thingDescriptionObject)
 	thing.setPropertyReadHandler("status", async () => "testing")
+	thing.setPropertyObserveHandler("status", async () => setTimeout(() => "observation", 1000))
 	await thing.expose()
 	console.info(`${thing.getThingDescription().title} ready`)
 })
