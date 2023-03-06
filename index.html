@@ -1,15 +1,13 @@
 <html>
-
+<!-- based on node-wot /examples/browser/index.{html, js} -->
 <head>
 	<script src="https://cdn.jsdelivr.net/npm/@node-wot/browser-bundle@latest/dist/wot-bundle.min.js"></script>
-	<script>
-		var servient = new Wot.Core.Servient();
-		var client = new Wot.Http.HttpClient();
-	</script>
+	<script src="client.js" defer></script>
 </head>
 
 <body>
-
+	<input id="td_addr" type="url" value="" />
+	<button id="fetch" type="button">Fetch & Consume</button>
 </body>
 
 </html>
