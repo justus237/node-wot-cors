@@ -1,0 +1,1 @@
+# node-wot-cors
