@@ -2,7 +2,7 @@ const servient = new Wot.Core.Servient();
 const httpConfig = {
 	allowSelfSigned: true
 };
-servient.addClientFactory(new Wot.Http.HttpsClientFactory(httpConfig));
+servient.addClientFactory(new Wot.Http.HttpClientFactory(httpConfig));
 servient.addCredentials({
 	"urn:uuid:8b82d730-44af-4305-ba01-c487ff5af1a0": {
 		username: "username",
@@ -12,6 +12,7 @@ servient.addCredentials({
 const helpers = new Wot.Core.Helpers(servient);
 document.getElementById("fetch").onclick = () => {
 	servient.start().then((WoT) => {
+		setTimeout(() => testActionWithWrongMethod(), 1000);
 		helpers.fetch(document.getElementById("td_addr").value)
 			.then((td) => {
 				console.log(td);
@@ -29,4 +30,17 @@ document.getElementById("fetch").onclick = () => {
 			})
 			.catch((error) => window.alert("fetch TD\n" + error));
 	});
+	function testActionWithWrongMethod() {
+		//code from https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#requests_with_credentials
+		//simulate using a wrong HTTP method on an interaction affordance
+		const invocation = new XMLHttpRequest();
+		const url = document.getElementById("td_addr").value+"/actions/testaction";
+		invocation.open("GET", url, true, "username", "password");
+		invocation.setRequestHeader("Authorization", "Basic " + btoa("username:password"));
+		console.log(invocation)
+		//below line results in no preflight
+		invocation.withCredentials = true;
+		invocation.onreadystatechange = (ev) => console.log(ev);
+		invocation.send();
+	}
 };
