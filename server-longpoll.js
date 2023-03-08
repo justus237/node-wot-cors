@@ -34,11 +34,10 @@ servient.start()
 .then( async (WoT) => {
 	const thing = await WoT.produce(thingDescriptionObject)
 	thing.setPropertyReadHandler("status", async () => "testing")
-	thing.setPropertyObserveHandler("status", async () => {
-		console.log("observing")
-		return "observation"})
+	thing.setPropertyObserveHandler("status", async () => console.log("observing"))
 	await thing.expose()
 	console.info(`${thing.getThingDescription().title} ready`)
+	setInterval(() => thing.emitPropertyChange("status"), 2000)
 })
 .catch((err) => {
 	console.log(err);

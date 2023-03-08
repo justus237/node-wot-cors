@@ -1,8 +1,8 @@
 const { Servient, Helpers } = require("@node-wot/core");
 const { HttpServer } = require("@node-wot/binding-http");
 const httpConfig = {
-	serverKey: "server.key",
-	serverCert: "server.cert",
+	//serverKey: "server.key",
+	//serverCert: "server.cert",
 	security: {
 		scheme: "basic", // (username & password)
 	},
@@ -24,6 +24,12 @@ let thingDescriptionObject = {
 			"type": "string",
 			"readOnly": true
 		}
+	},
+	actions: {
+		"testaction": {
+			"title": "this will need to be POST",
+			"description": "this is a test action"
+		}
 	}
 }
 
@@ -42,6 +48,7 @@ servient.start()
 .then( async (WoT) => {
 	const thing = await WoT.produce(thingDescriptionObject)
 	thing.setPropertyReadHandler("status", async () => "testing")
+	thing.setActionHandler("testaction", (params, options) => console.log("testaction called successfully"))
 	await thing.expose()
 	console.info(`${thing.getThingDescription().title} ready`)
 })
