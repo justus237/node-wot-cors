@@ -22,7 +22,8 @@ let thingDescriptionObject = {
 	properties: {
 		"status": {
 			"type": "string",
-			"readOnly": true
+			"readOnly": false,
+			"writeOnly":false
 		}
 	},
 	actions: {
@@ -48,6 +49,7 @@ servient.start()
 .then( async (WoT) => {
 	const thing = await WoT.produce(thingDescriptionObject)
 	thing.setPropertyReadHandler("status", async () => "testing")
+	thing.setPropertyWriteHandler("status", (value) => console.log("received write"))
 	thing.setActionHandler("testaction", (params, options) => console.log("testaction called successfully"))
 	await thing.expose()
 	console.info(`${thing.getThingDescription().title} ready`)
