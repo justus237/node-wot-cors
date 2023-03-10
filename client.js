@@ -12,7 +12,6 @@ servient.addCredentials({
 const helpers = new Wot.Core.Helpers(servient);
 document.getElementById("fetch").onclick = () => {
 	servient.start().then((WoT) => {
-		setTimeout(() => testActionWithWrongMethod(), 1000);
 		helpers.fetch(document.getElementById("td_addr").value)
 			.then((td) => {
 				console.log(td);
@@ -21,7 +20,19 @@ document.getElementById("fetch").onclick = () => {
 					thing.readProperty("status")
 					.then((status) => {
 						status.value()
-						.then((value) => window.alert("successfully got value of read property:\n" + value))
+						.then((value) => {
+							window.alert("successfully got value of read property:\n" + value)
+							testActionWithWrongMethod()
+							thing.invokeAction("testaction")
+							.then(() => {
+								thing.observeProperty("status", 
+								(data) => data.value().then((value) => {console.log("property observation",value)}),
+								(error) => console.log(error))
+								thing.subscribeEvent("testevent", 
+								(data) => data.value().then((value) => {console.log("event sub",value)}),
+								(error) => console.log(error))
+							})
+						})
 						.catch((error) => window.alert("failed to get value of read property\n" + error))
 					})
 					.catch((error) => window.alert("readProperty\n" + error));
