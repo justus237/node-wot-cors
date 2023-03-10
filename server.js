@@ -23,13 +23,19 @@ let thingDescriptionObject = {
 		"status": {
 			"type": "string",
 			"readOnly": false,
-			"writeOnly":false
+			"writeOnly":false,
+			"observable": true
 		}
 	},
 	actions: {
 		"testaction": {
 			"title": "this will need to be POST",
 			"description": "this is a test action"
+		}
+	},
+	events: {
+		"testevent": {
+			"type": "string"
 		}
 	}
 }
@@ -51,8 +57,11 @@ servient.start()
 	thing.setPropertyReadHandler("status", async () => "testing")
 	thing.setPropertyWriteHandler("status", (value) => console.log("received write"))
 	thing.setActionHandler("testaction", (params, options) => console.log("testaction called successfully"))
+	thing.setEventHandler("testevent", () => "test success")
 	await thing.expose()
 	console.info(`${thing.getThingDescription().title} ready`)
+	setInterval(() => thing.emitEvent("testevent", "test success"), 2000)
+	setInterval(() => thing.emitPropertyChange("status"), 2000)
 })
 .catch((err) => {
 	console.log(err);
