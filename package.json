@@ -7,5 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "mkdir node-wot; cd node-wot; git init; git remote add -f origin https://github.com/eclipse/thingweb.node-wot;git config core.sparseCheckout true; git pull origin pull/934/head; npm install; cd ./packages; cd ./td-tools; npm install; npm run build; cd ..; cd ./core; npm install; npm run build; cd ..; cd ./binding-http; npm install; npm run build; cd ..; cd ..; cd ..; npm install ./node-wot/packages/td-tools; npm install ./node-wot/packages/core; npm i ./node-wot/packages/binding-http"
   },
-  "author": ""
+  "author": "",
+  "dependencies": {
+    "@node-wot/binding-http": "^0.8.7",
+    "@node-wot/core": "^0.8.7",
+    "async-mutex": "^0.4.0"
+  }
 }
